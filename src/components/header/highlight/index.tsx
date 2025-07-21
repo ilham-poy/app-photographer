@@ -1,8 +1,10 @@
 
 
+type HighlightProps = {
+    children: React.ReactNode;
+};
 
-
-export default function Highlight({ children }) {
+export default function Highlight({ children }: HighlightProps) {
     const data = children;
     return (
         <div className="overflow-hidden" id='home'>
