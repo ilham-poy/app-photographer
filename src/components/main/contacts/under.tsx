@@ -53,8 +53,6 @@ export default function UnderContactPage() {
         event.preventDefault();
 
         try {
-            setSendProcess(true);
-
             const api = process.env.NEXT_PUBLIC_BACKEND_SERVICES_EMAIL;
             const response = await fetch(`${api}`, {
                 method: 'POST',
@@ -63,15 +61,24 @@ export default function UnderContactPage() {
                 },
                 body: JSON.stringify({ title, name, email, message }),
             });
+
+
             const data = await response.json();
             if (data) {
+                setSendProcess(true);
                 setTimeout(() => {
                     setSendProcess(false)
                 }, 2000)
             }
 
+
+
         } catch (error: any) {
-            alert("Sedang Ada Masalah, Silahkan Coba Lagi");
+            setSendProcess(false)
+            setTimeout(() => {
+                alert("Sedang Ada Masalah, Silahkan Coba Lagi");
+            }, 2000)
+
         }
     };
     return (
@@ -81,9 +88,9 @@ export default function UnderContactPage() {
                     className="fixed top-20 right-4 z-50 bg-black border-l-4 border-gray-500  p-4 w-[280px] sm:w-[500px]"
 
                 >
-                    <p className="font-bold text-sm sm:text-xl text-white">Data Berhasil Terkirim</p>
-                    <p className="text-xs sm:text-base text-white">Terima kasih sudah menghubungi kami.</p>
-                    <p className="text-xs sm:text-base  text-white">Kami akan segera merespons pesan Anda secepat mungkin.</p>
+                    <p className="font-bold text-sm sm:text-base text-white">Data Berhasil Terkirim</p>
+                    <p className="text-xs sm:text-sm text-white">Terima kasih sudah menghubungi kami.</p>
+                    <p className="text-xs sm:text-sm  text-white">Kami akan segera merespons pesan Anda secepat mungkin.</p>
                 </div>
             )}
             <div className="p-5">
