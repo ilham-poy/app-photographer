@@ -1,5 +1,5 @@
 'use client';
-import { AppWindowIcon, CodeIcon } from "lucide-react"
+import { AppWindowIcon, CodeIcon, Divide } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -26,6 +26,8 @@ export default function UnderContactPage() {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [title, setTittle] = useState('');
+    const [sendProcess, setSendProcess] = useState(false);
+    const [isError, setIsError] = useState(false);
 
 
     useEffect(() => {
@@ -51,6 +53,8 @@ export default function UnderContactPage() {
         event.preventDefault();
 
         try {
+            setSendProcess(true);
+
             const api = process.env.NEXT_PUBLIC_BACKEND_SERVICES_EMAIL;
             const response = await fetch(`${api}`, {
                 method: 'POST',
@@ -60,14 +64,28 @@ export default function UnderContactPage() {
                 body: JSON.stringify({ title, name, email, message }),
             });
             const data = await response.json();
-            console.log(data)
-            alert(data.message);
+            if (data) {
+                setTimeout(() => {
+                    setSendProcess(false)
+                }, 2000)
+            }
+
         } catch (error: any) {
-            alert("Masukan Data Dengan Baik dan Benar");
+            alert("Sedang Ada Masalah, Silahkan Coba Lagi");
         }
     };
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 h-auto mx-8 my-4">
+            {sendProcess && (
+                <div
+                    className="fixed top-20 right-4 z-50 bg-black border-l-4 border-gray-500  p-4 w-[280px] sm:w-[500px]"
+
+                >
+                    <p className="font-bold text-sm sm:text-xl text-white">Data Berhasil Terkirim</p>
+                    <p className="text-xs sm:text-base text-white">Terima kasih sudah menghubungi kami.</p>
+                    <p className="text-xs sm:text-base  text-white">Kami akan segera merespons pesan Anda secepat mungkin.</p>
+                </div>
+            )}
             <div className="p-5">
                 <div className="bg-[url('/bg/bg-contact.png')] bg-cover bg-center bg-no-repeat opacity-50 h-[75vh]">
                 </div>
@@ -91,15 +109,15 @@ export default function UnderContactPage() {
 
                                     <div className="text-white grid gap-3">
                                         <Label htmlFor="tabs-demo-current">Your Name</Label>
-                                        <Input id="tabs-demo-current" type="text" onChange={e => setName(e.target.value)} name="name" />
+                                        <Input id="tabs-demo-current" required type="text" onChange={e => setName(e.target.value)} name="name" />
                                     </div>
                                     <div className="text-white grid gap-3">
                                         <Label htmlFor="tabs-demo-current">Your Email</Label>
-                                        <Input id="tabs-demo-current" type="email" onChange={e => setEmail(e.target.value)} name="email" />
+                                        <Input id="tabs-demo-current" required type="email" onChange={e => setEmail(e.target.value)} name="email" />
                                     </div>
                                     <div className="text-white grid gap-3">
                                         <Label htmlFor="tabs-demo-new">Your Text</Label>
-                                        <Textarea id="message" rows={5} placeholder="Tulis pesan Anda..." onChange={e => setMessage(e.target.value)} name="message" />
+                                        <Textarea id="message" rows={5} required placeholder="Tulis pesan Anda..." onChange={e => setMessage(e.target.value)} name="message" />
                                     </div>
                                     <br />
                                 </CardContent>
@@ -120,15 +138,15 @@ export default function UnderContactPage() {
 
                                     <div className="text-white grid gap-3">
                                         <Label htmlFor="tabs-demo-current">Your Name</Label>
-                                        <Input id="tabs-demo-current" type="text" onChange={e => setName(e.target.value)} name="name" />
+                                        <Input id="tabs-demo-current" required type="text" onChange={e => setName(e.target.value)} name="name" />
                                     </div>
                                     <div className="text-white grid gap-3">
                                         <Label htmlFor="tabs-demo-current">Your Email</Label>
-                                        <Input id="tabs-demo-current" type="email" onChange={e => setEmail(e.target.value)} name="email" />
+                                        <Input id="tabs-demo-current" required type="email" onChange={e => setEmail(e.target.value)} name="email" />
                                     </div>
                                     <div className="text-white grid gap-3">
                                         <Label htmlFor="tabs-demo-new">Your Text</Label>
-                                        <Textarea id="message" rows={5} placeholder="Tulis pesan Anda..." onChange={e => setMessage(e.target.value)} name="message" />
+                                        <Textarea id="message" required rows={5} placeholder="Tulis pesan Anda..." onChange={e => setMessage(e.target.value)} name="message" />
                                     </div>
                                     <br />
                                 </CardContent>
